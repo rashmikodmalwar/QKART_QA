@@ -1,13 +1,11 @@
 package QKART_SANITY_LOGIN;
 
-// import java.util.ArrayList;
-// import java.util.List;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
-// import org.openqa.selenium.support.ui.ExpectedConditions;
-// import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 public class Home {
     RemoteWebDriver driver;
@@ -37,7 +35,7 @@ public class Home {
             // Error while logout
             return false;
         }
-
+    }
          /*
      * Returns Boolean if searching for the given product name occurs without any
      * errors
@@ -47,6 +45,11 @@ public class Home {
             // TODO: CRIO_TASK_MODULE_TEST_AUTOMATION - TEST CASE 03: MILESTONE 1
             // Clear the contents of the search box and Enter the product name in the search
             // box
+            WebElement searchBox = driver.findElement(By.xpath("(//input[@name ='search'])"));
+            searchBox.clear();
+            searchBox.sendKeys(product);
+            Thread.sleep(3000);
+
             return true;
         } catch (Exception e) {
             System.out.println("Error while searching for a product: " + e.getMessage());
@@ -58,12 +61,12 @@ public class Home {
      * Returns Array of Web Elements that are search results and return the same
      */
     public List<WebElement> getSearchResults() {
-        List<WebElement> searchResults = new ArrayList<WebElement>() {
-        };
+        List<WebElement> searchResults = new ArrayList<WebElement>(); 
         try {
             // TODO: CRIO_TASK_MODULE_TEST_AUTOMATION - TEST CASE 03: MILESTONE 1
             // Find all webelements corresponding to the card content section of each of
             // search results
+            searchResults = driver.findElements(By.xpath("//p[@class='MuiTypography-root MuiTypography-body1 css-yg30e6']"));
             return searchResults;
         } catch (Exception e) {
             System.out.println("There were no search results: " + e.getMessage());
@@ -81,6 +84,10 @@ public class Home {
             // TODO: CRIO_TASK_MODULE_TEST_AUTOMATION - TEST CASE 03: MILESTONE 1
             // Check the presence of "No products found" text in the web page. Assign status
             // = true if the element is *displayed* else set status = false
+            WebElement isProductFound =driver.findElement(By.xpath("//*[text()='No products found']"));
+            Thread.sleep(2000);
+            isProductFound.isDisplayed();
+            
             return status;
         } catch (Exception e) {
             return status;
@@ -101,12 +108,23 @@ public class Home {
              * 
              * Return true if these operations succeeds
              */
+            List<WebElement> searchProduct =driver.findElements(By.xpath("//p[@class='MuiTypography-root MuiTypography-body1 css-yg30e6']"));
+            WebElement addToCart = driver.findElement(By.xpath("//button[text() ='Add to cart']"));
+            for(WebElement search : searchProduct){
+                if(search.getText().equals(productName)){
+                    addToCart.click();
+                    return true;
+                }
+               
+            }
             System.out.println("Unable to find the given product");
             return false;
+            
         } catch (Exception e) {
             System.out.println("Exception while performing add to cart: " + e.getMessage());
             return false;
         }
+        
     }
 
     /*
@@ -117,6 +135,8 @@ public class Home {
         try {
             // TODO: CRIO_TASK_MODULE_TEST_AUTOMATION - TEST CASE 05: MILESTONE 4
             // Find and click on the the Checkout button
+            WebElement clickCheckout = driver.findElement(By.xpath("//button[text() ='Checkout']"));
+            clickCheckout.click();
             return status;
         } catch (Exception e) {
             System.out.println("Exception while clicking on Checkout: " + e.getMessage());
@@ -137,15 +157,49 @@ public class Home {
             // Increment or decrement the quantity of the matching product until the current
             // quantity is reached (Note: Keep a look out when then input quantity is 0,
             // here we need to remove the item completely from the cart)
+            List <WebElement> productAdded = driver.findElements(By.xpath("//*[@class='MuiBox-root css-1gjj37g']/div[1]"));
+          
+           int i=0; 
+           for(WebElement product : productAdded){    
+            String quantityString = "(//div[@data-testid='item-qty'])["+(i+1)+"]";
+            WebElement productQuantity = driver.findElement(By.xpath(quantityString));           
+                 if(productName.equals(product.getText())){
+                    if(quantity > Integer.parseInt(productQuantity.getText())){
+                            String increamentXpath ="(//*[@data-testid='AddOutlinedIcon'])["+(i+1)+"]";
 
+                            WebElement increamentWQuantity =driver.findElement(By.xpath(increamentXpath));
+                            for(int j=1;j<quantity;j++){
+                                Thread.sleep(2000);
+                                increamentWQuantity.click();
 
-            return false;
+                            }
+                            
+                            
+                        }
+                    else
+                        if(quantity < Integer.parseInt(productQuantity.getText())){
+                            int productSize = Integer.parseInt(productQuantity.getText());
+                            String decreamentXpath ="(//*[@data-testid='RemoveOutlinedIcon'])["+(i+1)+"]";
+                            WebElement decreamentQuantity = driver.findElement(By.xpath(decreamentXpath));
+                            for(int j=productSize;j>quantity;j--){
+                                decreamentQuantity.click();
+                            }
+                            
+                        }
+                        
+                    }
+                    i++;
+
+                }
+            
+           
         } catch (Exception e) {
             if (quantity == 0)
                 return true;
             System.out.println("exception occurred when updating cart: " + e.getMessage());
             return false;
         }
+        return true;
     }
 
     /*
@@ -154,19 +208,21 @@ public class Home {
     public Boolean verifyCartContents(List<String> expectedCartContents) {
         try {
             // TODO: CRIO_TASK_MODULE_TEST_AUTOMATION - TEST CASE 07: MILESTONE 6
+            
+          List<WebElement> cartContents = driver.findElements(By.xpath("//*[@class='MuiBox-root css-1gjj37g']/div[1]"));
+          for(int i=0;i<cartContents.size();i++){
+                if(cartContents.get(i).getText().equals(expectedCartContents.get(i))) {
+                    return true;
+    
+                }
+                
+          }
 
-            // Get all the cart items as an array of webelements
-
-            // Iterate through expectedCartContents and check if item with matching product
-            // name is present in the cart
-
-
-            return true;
-
-        } catch (Exception e) {
+     } catch (Exception e) {
             System.out.println("Exception while verifying cart contents: " + e.getMessage());
             return false;
         }
+        return true;
     }
 
 }

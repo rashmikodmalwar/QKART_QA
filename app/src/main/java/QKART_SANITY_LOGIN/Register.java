@@ -17,9 +17,10 @@ public class Register {
         this.driver = driver;
     }
 
-    public void navigateToRegisterPage() {
+    public void navigateToRegisterPage() throws InterruptedException {
         if (!driver.getCurrentUrl().equals(this.url)) {
             driver.get(this.url);
+            Thread.sleep(2000);
         }
     }
 
@@ -53,6 +54,7 @@ public class Register {
          this.driver.findElement(By.id("confirmPassword"));
 
         // Enter the Confirm Password Value
+        Thread.sleep(3000);
         confirm_password_txt_box.sendKeys(test_data_password);
 
         // Find the register now button
@@ -61,7 +63,7 @@ public class Register {
         // Click the register now button
         register_now_button.click();
         this.lastGeneratedUsername = test_data_username;
-        Thread.sleep(5000);
+        Thread.sleep(4000);
 
         return this.driver.getCurrentUrl().endsWith("/login");
     }
