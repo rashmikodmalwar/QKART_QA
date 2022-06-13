@@ -26,6 +26,7 @@ dependencies {
 }
 
 // Additional config for Crio workspace
+buildDir = '/tmp/external_build'
 
 task startScript(type:Exec) {
     commandLine '../selenium-run.sh'
@@ -35,4 +36,31 @@ run.dependsOn startScript
 
 test.dependsOn startScript
 
+test {
+    useTestNG()
+
+    afterSuite { desc, result ->
+            if (!desc.parent) {
+                println "\nTEST RESULT: ${result.resultType}"
+                println "TEST SUMMARY: RAN ${result.testCount} TESTS, " +
+                        "${result.successfulTestCount} SUCCEEDED, " +
+                        "${result.failedTestCount} FAILED, " +
+                        "${result.skippedTestCount} SKIPPED"
+            }
+    }
+
+    testLogging {
+		events "PASSED", "SKIPPED", "FAILED", "STANDARD_OUT", "STANDARD_ERROR"
+        exceptionFormat = 'full'
+
+        // Optionally do:
+        showStackTraces = true
+	}
+
+    testLogging.showStandardStreams = true
+    test.outputs.upToDateWhen {false}
+
+}
+
 mainClassName = 'QKART_SANITY_LOGIN.QkartSanity'
+mainClassName = 'QKART_SANITY_LOGIN.Module1.QkartSanity'
