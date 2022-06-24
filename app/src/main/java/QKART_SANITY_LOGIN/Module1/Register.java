@@ -1,7 +1,7 @@
 package QKART_SANITY_LOGIN.Module1;
 
 import java.sql.Timestamp;
-
+import javax.xml.xpath.XPath;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -26,6 +26,7 @@ public class Register {
 
     public Boolean registerUser(String Username, String Password, Boolean makeUsernameDynamic)
             throws InterruptedException {
+        WebDriverWait wait;
         // Find the Username Text Box
         WebElement username_txt_box = this.driver.findElement(By.id("username"));
 
@@ -57,15 +58,16 @@ public class Register {
         confirm_password_txt_box.sendKeys(test_data_password);
 
         // Find the register now button
-        WebElement register_now_button = this.driver.findElement(By.className("button"));
-
+        WebElement register_now_button = this.driver.findElement(By.xpath("//button[contains(@class,'css-177pwqq')]"));
+        //wait = new WebDriverWait(driver, 30);
+        //wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(@class,'css-177pwqq')]")));
         // Click the register now button
         register_now_button.click();
-
-
         // SLEEP_STMT_06: Wait for new user to get created in the backend
-
+        wait = new WebDriverWait(driver, 30);
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("notistack-snackbar")));
         this.lastGeneratedUsername = test_data_username;
+        
 
         return this.driver.getCurrentUrl().endsWith("/login");
     }

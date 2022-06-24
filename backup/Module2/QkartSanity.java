@@ -102,7 +102,6 @@ public class QkartSanity {
         // Visit the Registration page and try to register using the previously
         // registered user's credentials
         registration.navigateToRegisterPage();
-        Thread.sleep(2000);
         status = registration.registerUser(lastGeneratedUserName, "abc@123", false);
 
         // If status is true, then registration succeeded, else registration has
@@ -122,7 +121,7 @@ public class QkartSanity {
         Home homePage = new Home(driver);
         homePage.navigateToHome();
 
-        Thread.sleep(5000);
+        //Thread.sleep(5000);
 
         // Search for the "yonex" product
         status = homePage.searchForProduct("yonex");
@@ -133,7 +132,6 @@ public class QkartSanity {
 
         // Fetch the search results
         List<WebElement> searchResults = homePage.getSearchResults();
-        Thread.sleep(4000);
 
         // Verify the search results are available
         if (searchResults.size() == 0) {
@@ -155,8 +153,7 @@ public class QkartSanity {
         }
 
         logStatus("Step Success", "Successfully validated the search results ", "PASS");
-        Thread.sleep(2000);
-
+       
         // Search for product
         status = homePage.searchForProduct("Gesundheit");
         if (!status) {

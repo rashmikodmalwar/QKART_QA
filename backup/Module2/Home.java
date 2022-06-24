@@ -48,7 +48,7 @@ public class Home {
             WebElement searchBox = driver.findElement(By.xpath("(//input[@name ='search'])"));
             searchBox.clear();
             searchBox.sendKeys(product);
-            Thread.sleep(3000);
+            
 
             return true;
         } catch (Exception e) {
