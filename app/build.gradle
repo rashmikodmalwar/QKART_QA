@@ -37,7 +37,8 @@ run.dependsOn startScript
 test.dependsOn startScript
 
 test {
-    useTestNG()
+    useTestNG() {
+    }
 
     afterSuite { desc, result ->
             if (!desc.parent) {
@@ -62,5 +63,5 @@ test {
 
 }
 
-mainClassName = 'QKART_SANITY_LOGIN.QkartSanity'
 mainClassName = 'QKART_SANITY_LOGIN.Module1.QkartSanity'
+mainClassName = 'QKART_SANITY_LOGIN.Module4.QkartSanityV2'
