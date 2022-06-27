@@ -67,7 +67,7 @@ public class Checkout {
              * Iterate through all the address boxes to find the address box with matching
              * text, addressToSelect and click on it
              */
-            WebElement parentBox = driver.findElement(By.xpath("//*[@id=\"root\"]/div/div[2]/div[1]/div/div[1]"));
+            WebElement parentBox = driver.findElement(By.xpath("//*[@id='root']/div/div[2]/div[1]/div/div[1]"));
             List<WebElement> allBoxes = parentBox.findElements(By.className("not-selected"));
 
             for (WebElement box : allBoxes) {
@@ -93,13 +93,13 @@ public class Checkout {
     public Boolean placeOrder() {
         try {
             // Find the "PLACE ORDER" button and click on it
-            List<WebElement> elements = driver.findElementsByClassName("css-177pwqq");
-            for (WebElement element : elements) {
+        WebElement element = driver.findElement(By.xpath("//button[contains(@class,'css-177pwqq')]"));
+            // for (WebElement element : elements) {
                 if (element.getText().equals("PLACE ORDER")) {
                     element.click();
                     return true;
                 }
-            }
+           
             return false;
 
         } catch (Exception e) {
