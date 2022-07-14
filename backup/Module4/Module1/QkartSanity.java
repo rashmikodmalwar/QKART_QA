@@ -29,6 +29,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class QkartSanity {
 
     public static String lastGeneratedUserName;
+    
 
     public static RemoteWebDriver createDriver() throws MalformedURLException {
         // Launch Browser using Zalenium
@@ -46,6 +47,7 @@ public class QkartSanity {
     }
 
     public static void takeScreenshot(WebDriver driver, String screenshotType, String description) {
+        // TODO: CRIO_TASK_MODULE_SYNCHRONISATION - Implement method using below steps
         /*
          * 1. Check if the folder "/screenshots" exists, create if it doesn't
          * 2. Generate a unique string using the timestamp
