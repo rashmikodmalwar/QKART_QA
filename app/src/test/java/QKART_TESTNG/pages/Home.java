@@ -47,13 +47,13 @@ public class Home {
         try {
             // Clear the contents of the search box and Enter the product name in the search
             // box
-            WebElement searchBox = driver.findElement(By.xpath("//input[@name='search'][1]"));
+            WebElement searchBox = driver.findElement(By.xpath("(//input[@name='search'])[1]"));
             searchBox.clear();
             searchBox.sendKeys(product);
 
             WebDriverWait wait = new WebDriverWait(driver, 30);
-            wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(String
-                    .format("//div[@class='MuiCardContent-root css-1qw96cp'][1]/p[contains(text(),'%s')]", product))));
+            wait.until(ExpectedConditions.or(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//div[contains(@class,'MuiGrid-grid-xs-6')]//div[contains(@class,'MuiCardContent-root')]//p[contains(@class,'css-yg30e6')]"), product),
+            ExpectedConditions.presenceOfElementLocated(By.xpath("//h4[text()=' No products found ']"))));
             Thread.sleep(3000);
             return true;
         } catch (Exception e) {
@@ -111,9 +111,12 @@ public class Home {
                 if (productName.contains(cell.findElement(By.className("css-yg30e6")).getText())) {
                     cell.findElement(By.tagName("button")).click();
 
-                    WebDriverWait wait = new WebDriverWait(driver, 30);
+                    WebDriverWait wait = new WebDriverWait(driver, 40);
                     wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-                            String.format("//*[@class='MuiBox-root css-1gjj37g']/div[1][text()='%s']", productName))));
+                            String.format(
+                                    "//p[text()='%s']",
+                                    productName))));
+                            Thread.sleep(3000);
                     return true;
                 }
             }
